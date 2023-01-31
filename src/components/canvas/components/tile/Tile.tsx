@@ -3,7 +3,13 @@ import { isOverlayAtom } from '@store/canvas';
 import { Nullable } from 'babylonjs';
 import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
-import { Html, useBeforeRender, useClick, useHover } from 'react-babylonjs';
+import {
+    Html,
+    TextBlock,
+    useBeforeRender,
+    useClick,
+    useHover,
+} from 'react-babylonjs';
 
 interface TileProps {
     name: string;
@@ -31,20 +37,20 @@ const Tile = ({ name, position, hoveredColor, color }: TileProps) => {
         boxRef,
     );
 
-    useEffect(() => {
-        if (boxRef.current) {
-            boxRef.current.drawText(
-                'textttt',
-                75,
-                135,
-                font,
-                'green',
-                'white',
-                true,
-                true,
-            );
-        }
-    }, [boxRef.current]);
+    // useEffect(() => {
+    //     if (boxRef.current) {
+    //         boxRef.current.drawText(
+    //             'textttt',
+    //             75,
+    //             135,
+    //             font,
+    //             'green',
+    //             'white',
+    //             true,
+    //             true,
+    //         );
+    //     }
+    // }, [boxRef.current]);
     return (
         <box
             name={name}
@@ -53,24 +59,12 @@ const Tile = ({ name, position, hoveredColor, color }: TileProps) => {
             position={position}
             height={0.1}
         >
-            <Html name="html" center>
-                {
-                    <div
-                        style={{
-                            backgroundColor: 'white',
-                            borderRadius: '5px',
-                            padding: '2px',
-                        }}
-                    >
-                        Text
-                    </div>
-                }
-            </Html>
             <standardMaterial
                 name={`${name}-mat`}
                 diffuseColor={hovered ? hoveredColor : color}
                 specularColor={Color3.Black()}
             />
+            <TextBlock text={'Selection made'} height="56px" />
         </box>
     );
 };
