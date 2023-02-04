@@ -5,7 +5,6 @@ import { styled } from '@mui/material';
 
 import { CanvasUi } from '@components/canvas-ui';
 
-import { TextMesh } from './base-components';
 import { Board } from './components';
 
 const Container = styled('div')({
@@ -30,11 +29,6 @@ export const Canvas = () => (
                 />
                 <Skybox rootUrl="/SkyWater.dds" />
                 <Board name="mainBoard" position={new Vector3(0, 0, 0)} />
-                <TextMesh
-                    text="Testowy string"
-                    position={new Vector3(1, 1, 1)}
-                    name="test"
-                />
             </Scene>
         </Engine>
         <CanvasUi />

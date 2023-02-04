@@ -1,8 +1,9 @@
 import { Color3, Mesh, Vector3 } from '@babylonjs/core';
-import { isOverlayAtom } from '@store/canvas';
+import { Rectangle } from '@babylonjs/gui';
+import { useUiViewSetters } from '@store/ui-view';
 import { Nullable } from 'babylonjs';
 import { useAtom } from 'jotai';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import {
     Html,
     TextBlock,
@@ -10,6 +11,8 @@ import {
     useClick,
     useHover,
 } from 'react-babylonjs';
+
+import { UiView } from '@common/models/enums';
 
 interface TileProps {
     name: string;
@@ -21,50 +24,66 @@ interface TileProps {
 export const TILE_SIZE = 1;
 
 const Tile = ({ name, position, hoveredColor, color }: TileProps) => {
-    const boxRef = useRef<Nullable<Mesh>>(null);
+    const rectRef = useRef<Nullable<Mesh>>(null);
 
-    const [_, setOverlay] = useAtom(isOverlayAtom);
+    const { openTileCard } = useUiViewSetters();
 
-    const [clicked, setClicked] = useState(false);
-
-    useClick(() => setOverlay(true), boxRef);
-
+    useClick(() => openTileCard({ city: name }), rectRef);
+    console.log('rerender');
     const [hovered, setHovered] = useState(false);
 
     useHover(
         () => setHovered(true),
         () => setHovered(false),
-        boxRef,
+        rectRef,
     );
 
-    // useEffect(() => {
-    //     if (boxRef.current) {
-    //         boxRef.current.drawText(
-    //             'textttt',
-    //             75,
-    //             135,
-    //             font,
-    //             'green',
-    //             'white',
-    //             true,
-    //             true,
-    //         );
-    //     }
-    // }, [boxRef.current]);
     return (
-        <box
-            name={name}
-            ref={boxRef}
-            size={TILE_SIZE}
-            position={position}
-            height={0.1}
-        >
+        <box name={name} size={TILE_SIZE} position={position} height={0.1}>
             <standardMaterial
                 name={`${name}-mat`}
-                diffuseColor={hovered ? hoveredColor : color}
+                diffuseColor={Color3.Black()}
                 specularColor={Color3.Black()}
-            />
-            <TextBlock text={'Selection made'} height="56px" />
+            >
+                <plane
+                    name="dialog"
+                    ref={rectRef}
+                    size={1}
+                    position={position.add(new Vector3(0, 0.1, 0))}
+                    rotation={new Vector3(1.6, 0, 1.57)}
+                >
+                    <advancedDynamicTexture
+                        name="dialogTexture"
+                        height={1024}
+                        width={1024}
+                        createForParentMesh={true}
+                        hasAlpha={true}
+                    >
+                        <rectangle
+                            name="rect-1"
+                            height={1}
+                            width={1}
+                            thickness={12}
+                            cornerRadius={12}
+                        >
+                            <rectangle>
+                                <babylon-button
+                                    name="close-icon"
+                                    background="green"
+                                >
+                                    <textBlock
+                                        text={name}
+                                        fontFamily="FontAwesome"
+                                        fontStyle="bold"
+                                        fontSize={200}
+                                        color="white"
+                                    />
+                                </babylon-button>
+                            </rectangle>
+                        </rectangle>
+                    </advancedDynamicTexture>
+                </plane>
+            </standardMaterial>
         </box>
     );
 };

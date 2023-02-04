@@ -1,9 +1,11 @@
-import { isOverlayAtom } from '@store/canvas';
+import { useUiViewGetter } from '@store/ui-view';
 import { useAtom } from 'jotai';
 
 import { Box, Button, styled } from '@mui/material';
 
-// interface CanvasUiProps {}
+import { UiView } from '@common/models/enums';
+
+import TileCard from './views/tile-card';
 
 const Overlay = styled(Box)({
     position: 'absolute',
@@ -17,14 +19,23 @@ const Overlay = styled(Box)({
     },
 });
 
+const ViewLookup: { [key in UiView]: JSX.Element | null } = {
+    [UiView.Default]: null,
+    [UiView.TileCard]: <TileCard />,
+};
+
 const CanvasUi = () => {
-    const [isOverlay, setOverlay] = useAtom(isOverlayAtom);
+    const { activeView } = useUiViewGetter();
 
     return (
-        <Overlay component="div" visibility={isOverlay ? 'visible' : 'hidden'}>
-            <Button onClick={() => setOverlay(false)} variant="contained">
-                Click me to close
-            </Button>
+        <Overlay component="div">
+            {activeView == UiView.Default ? (
+                <Button onClick={() => console.log('kulomy ni ')}>
+                    Kulnij kosteczką
+                </Button>
+            ) : (
+                ViewLookup[activeView]
+            )}
         </Overlay>
     );
 };
