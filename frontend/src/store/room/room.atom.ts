@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import { atomsWithQuery } from 'jotai-tanstack-query';
 
 interface Estate {
     name: string;
@@ -16,12 +17,12 @@ interface Player {
 interface Room {
     id: number;
     turn: number;
-    currentPlayerId: Pick<Player, 'id'>;
+    currentPlayerId: number;
     players: Player[];
-    settings: string;
-    modifiers: string;
-    createdAt: Date;
-    updatedAt: Date;
+    settings?: string;
+    modifiers?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 const mockedPlayers = [
@@ -43,16 +44,12 @@ const mockedPlayers = [
     },
 ];
 
-// const mockedRoom: Room = {
-//     id: 0,
-//     turn: 0,
-//     currentPlayerId: 0,
-//     settings: '',
-// };
+const mockedRoom: Room = {
+    id: 0,
+    turn: 0,
+    currentPlayerId: 0,
+    settings: '',
+    players: mockedPlayers,
+};
 
-// const roomAtom = atom<Room>(mockedRoom);
-
-// const useRoom = () => {
-
-//   return
-// }
+const roomAtom = atomsWih<Room>(mockedRoom);

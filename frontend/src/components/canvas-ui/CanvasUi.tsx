@@ -1,5 +1,5 @@
-import { useUiViewGetter } from '@store/ui-view';
-import { useAtom } from 'jotai';
+import { uiViewAtom } from '@store/ui-view';
+import { useAtomValue } from 'jotai';
 
 import { Box, Button, styled } from '@mui/material';
 
@@ -19,13 +19,13 @@ const Overlay = styled(Box)({
     },
 });
 
-const ViewLookup: { [key in UiView]: JSX.Element | null } = {
+const ViewLookup = (props: any) => ({
     [UiView.Default]: null,
-    [UiView.TileCard]: <TileCard />,
-};
+    [UiView.TileCard]: <TileCard {...props} />,
+});
 
 const CanvasUi = () => {
-    const { activeView } = useUiViewGetter();
+    const { props, activeView } = useAtomValue(uiViewAtom);
 
     return (
         <Overlay component="div">
@@ -34,7 +34,7 @@ const CanvasUi = () => {
                     Kulnij kosteczką
                 </Button>
             ) : (
-                ViewLookup[activeView]
+                ViewLookup(props)[activeView]
             )}
         </Overlay>
     );

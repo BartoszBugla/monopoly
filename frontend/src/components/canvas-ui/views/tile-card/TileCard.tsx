@@ -1,5 +1,9 @@
-import { useUiViewGetter, useUiViewSetters } from '@store/ui-view';
-import { TileCardProps } from '@store/ui-view/ui-view.atoms';
+import {
+    TileCardProps,
+    closeUiViewAtom,
+    openTileCardAtom,
+} from '@store/ui-view/ui-view.atoms';
+import { useSetAtom } from 'jotai';
 
 import { Card as BaseCard, styled } from '@mui/material';
 
@@ -17,15 +21,12 @@ const Card = styled(BaseCard)({
     height: '20vh',
 });
 
-const TileCard = () => {
-    const { closeUiView } = useUiViewSetters();
-    const { props } = useUiViewGetter();
-    const { city } = props as TileCardProps;
+const TileCard = ({ city }: TileCardProps) => {
+    const closeUiView = useSetAtom(closeUiViewAtom);
 
-    console.log('rerender card');
     return (
         <Container onClick={closeUiView}>
-            {/* <Card>Hello world i am centered {city} </Card> */}
+            <Card>Hello world i am centered {city} </Card>
         </Container>
     );
 };

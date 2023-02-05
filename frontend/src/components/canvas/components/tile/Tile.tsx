@@ -1,18 +1,9 @@
 import { Color3, Mesh, Vector3 } from '@babylonjs/core';
-import { Rectangle } from '@babylonjs/gui';
-import { useUiViewSetters } from '@store/ui-view';
+import { openTileCardAtom } from '@store/ui-view';
 import { Nullable } from 'babylonjs';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { useRef, useState } from 'react';
-import {
-    Html,
-    TextBlock,
-    useBeforeRender,
-    useClick,
-    useHover,
-} from 'react-babylonjs';
-
-import { UiView } from '@common/models/enums';
+import { useClick, useHover } from 'react-babylonjs';
 
 interface TileProps {
     name: string;
@@ -26,10 +17,10 @@ export const TILE_SIZE = 1;
 const Tile = ({ name, position, hoveredColor, color }: TileProps) => {
     const rectRef = useRef<Nullable<Mesh>>(null);
 
-    const { openTileCard } = useUiViewSetters();
+    const openTileCard = useSetAtom(openTileCardAtom);
 
     useClick(() => openTileCard({ city: name }), rectRef);
-    console.log('rerender');
+
     const [hovered, setHovered] = useState(false);
 
     useHover(
